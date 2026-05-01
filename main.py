@@ -55,8 +55,8 @@ def input(key):
         player.enabled = not inventory_open
 
     if not inventory_open:
-        if key == 'scroll up': active_slot = (active_slot + 1) % 5
-        if key == 'scroll down': active_slot = (active_slot - 1) % 5
+        if key == 'scroll up': active_slot = (active_slot - 1) % 5
+        if key == 'scroll down': active_slot = (active_slot + 1) % 5
 
     if inventory_open and selected_texture_to_assign:
         if key in ('1', '2', '3', '4', '5'):
@@ -149,13 +149,24 @@ class Voxel(Button):
     def __init__(self, position=(0, 0, 0), texture=textures['grass']):
         super().__init__(
             parent=scene, position=position, model='cube', origin_y=0.5,
-            texture=texture, color=color.white, highlight_color=color.light_gray
+            texture=texture, color=color.white,
+            highlight_color=color.light_gray
         )
 
+    def update(self):
+        dist = distance(self.world_position, player.world_position)
+
+        if dist > 7:
+            self.hoverable = False
+            self.color = color.white
+        else:
+            self.hoverable = True
+
     def input(self, key):
-        if self.hovered and not inventory_open:
+        if self.hovered and self.hoverable and not inventory_open:
             if key == 'right mouse down':
                 Voxel(position=self.position + mouse.normal, texture=hotbar_slots[active_slot])
+
             if key == 'left mouse down':
                 destroy(self)
 
