@@ -171,8 +171,8 @@ class Voxel(Button):
                 destroy(self)
 
 
-for z in range(15):
-    for x in range(15):
+for z in range(20):
+    for x in range(20):
         Voxel(position=(x, 0, z))
 
 player = FirstPersonController()
